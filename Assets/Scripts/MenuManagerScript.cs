@@ -2,18 +2,26 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class MenuManagerScript : MonoBehaviour {
+public class MenuManagerScript : MonoBehaviour
+{
+    private CanvasGroup FadeGroup;
+    private float fadeInSpeed = 0.33f;
 
-	void Start () {
-	
-	}
-		
-	void UnlockedLevels(){
-	
-	}
+    private void Start()
+    {
+        FadeGroup = FindObjectOfType<CanvasGroup>();
 
-	public void ToGame(int levelIndex){
-		DataHelper.Instance.CurrentLevel = levelIndex;
-		SceneManager.LoadScene ("Game");
-	}
+        FadeGroup.alpha = 1;
+    }
+
+    private void Update()
+    {
+        FadeGroup.alpha = 1 - Time.timeSinceLevelLoad * fadeInSpeed;
+    }
+
+    public void ToGame(int levelIndex)
+    {
+        DataHelper.Instance.CurrentLevel = levelIndex;
+        SceneManager.LoadScene("Game");
+    }
 }
