@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
 
     private Level CurrentLevel;
     private float StartingTime;
+    private GameObject clone;
+    private Camera MainCamera;
+    private BaseEnemyScript Enemy;
 
     public int Gold { get; set; }
     public GameObject turretContainer;
@@ -20,16 +23,18 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        SceneManager.LoadScene(DataHelper.Instance.CurrentLevel.ToString(), LoadSceneMode.Additive);
         Instance = this;
         CurrentLevel = DataHelper.Instance.levels[DataHelper.Instance.CurrentLevel];
         Gold += CurrentLevel.StartingGold;
+        MainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         //Game UI
         currentLevelIndex.text = CurrentLevel.levelName;
 
         UnlockTurrets();
         UpdateGoldText();
+        SceneManager.LoadScene(DataHelper.Instance.CurrentLevel.ToString(), LoadSceneMode.Additive);
+
         StartingTime = Time.time;
     }
 
@@ -40,10 +45,15 @@ public class GameManager : MonoBehaviour
         {
             if (CurrentLevel.objects[i].time < gameDuration)
             {
-                Instantiate(enemyContainer[1], new Vector3(CurrentLevel.objects[i].positionX + 0.5f, 0f, CurrentLevel.objects[i].positionZ + 0.5f), Quaternion.identity);
+                clone = Instantiate(enemyContainer[1], new Vector3(CurrentLevel.objects[i].positionX + 0.5f, 0f, CurrentLevel.objects[i].positionZ + 0.5f), Quaternion.identity) as GameObject;
                 enemySpawned = true;
                 CurrentLevel.objects.Remove(CurrentLevel.objects[i]);
             }
+        }
+
+        if (GetClickedEnemy() != null)
+        {
+            DestroyEnemyByClicking(GetClickedEnemy());
         }
     }
 
@@ -68,12 +78,32 @@ public class GameManager : MonoBehaviour
     {
         goldAmountText.text = Gold.ToString();
     }
-    /* private void AddEnemies()
-     {
-         foreach (enemySpawnInformation e in GameManager.Instance.CurrentLevel.objects)
-         {
-             Instantiate(enemyContainer[1], new Vector3(e.positionX + 0.5f, 0f, e.positionZ + 0.5f), Quaternion.identity);
-             CurrentLevel.objects.Remove(e);
-         }
-     }*/
+
+    public void DestroyEnemyByClicking(BaseEnemyScript enemy)
+    {
+        if (enemy.Life > 10)
+            enemy.Life -= 10;
+        if (enemy.Life <= 0)
+        {
+            Destroy(enemy.gameObject);
+        }
+        Debug.Log(enemy.Life);
+    }
+
+    public BaseEnemyScript GetClickedEnemy()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Enemy")))
+            {
+                if (hit.rigidbody != null)
+                {
+                    return hit.collider.gameObject.GetComponent<BaseEnemyScript>();
+                }
+            }
+        }
+        return null;
+    }
 }
