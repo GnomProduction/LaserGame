@@ -4,30 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BaseEnemyScript : MonoBehaviour
+public interface IBaseEnemy
 {
-    //private Quaternion MyRotation;
-    private float Speed;
-    private bool attack = false;
-    private NavMeshAgent Agent;
+    void AttactTurret();
+}
 
+public class BaseEnemyScript : MonoBehaviour, IBaseEnemy
+{
+    public bool attack = false;
+    
+    protected NavMeshAgent Agent;
+    protected float Speed;
+
+    public uint Life { get; set; }
     public Rigidbody myRigid;
     public Transform turret;
 
     private void Start()
     {
         Speed = 0.05f;
-        //MyRotation = transform.rotation;
+        Life = 100;
         myRigid = gameObject.GetComponent<Rigidbody>();
-
         Agent = GetComponent<NavMeshAgent>();
-
-        //Checking for turret
-        if (GameObject.FindGameObjectWithTag("Turret") != null)
-        {
-            turret = GameObject.FindGameObjectWithTag("Turret").transform;
-            attack = true;
-        }
     }
 
     private void FixedUpdate()
@@ -38,11 +36,11 @@ public class BaseEnemyScript : MonoBehaviour
         }
     }
 
-    private void AttactTurret()
+    public void AttactTurret()
     {
         Agent.SetDestination(turret.position);
-       /* transform.LookAt(turret);
-        transform.position += transform.forward * Speed;*/
+        /* transform.LookAt(turret);
+         transform.position += transform.forward * Speed;*/
     }
 
     private void Rest()
