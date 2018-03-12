@@ -22,10 +22,10 @@ GameObject:
   - component: {fileID: 33871810584880932}
   - component: {fileID: 65550256460012222}
   - component: {fileID: 23813979815131360}
-  - component: {fileID: 114864312876958022}
   - component: {fileID: 54647313338919412}
-  - component: {fileID: 195923772725112896}
-  m_Layer: 0
+  - component: {fileID: 195690667569496240}
+  - component: {fileID: 114313627362987512}
+  m_Layer: 9
   m_Name: EnemyPrefab
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -75,6 +75,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33871810584880932
 MeshFilter:
@@ -110,7 +111,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114864312876958022
+--- !u!114 &114313627362987512
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -121,22 +122,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d247bfcb36443458ecb1a577ec4893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: 0
   myRigid: {fileID: 0}
   turret: {fileID: 0}
---- !u!195 &195923772725112896
+--- !u!195 &195690667569496240
 NavMeshAgent:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1948287367169842}
   m_Enabled: 1
+  m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1

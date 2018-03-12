@@ -9,6 +9,7 @@ TagManager:
   - refCube
   - Prism
   - Enemy
+  - WandarPoint
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - 
   - 
   - GameGrid
-  - 
+  - Enemy
   - 
   - 
   - 
