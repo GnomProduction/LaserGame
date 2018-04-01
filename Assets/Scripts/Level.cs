@@ -15,6 +15,7 @@ public class Level
     public uint UnlockedTowers;
     public int StartingGold;
     public List<enemySpawnInformation> objects;
+
     public Level(string levelString)
     {
         objects = new List<enemySpawnInformation>();

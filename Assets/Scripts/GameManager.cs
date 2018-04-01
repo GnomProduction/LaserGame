@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; set; }
 
-    private Level CurrentLevel;
     private float StartingTime;
     private GameObject clone;
     private Camera MainCamera;
@@ -20,10 +19,15 @@ public class GameManager : MonoBehaviour
     public Text currentLevelIndex;
     public Text goldAmountText;
     public bool enemySpawned;
+    public Level CurrentLevel;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
-        Instance = this;
         CurrentLevel = DataHelper.Instance.levels[DataHelper.Instance.CurrentLevel];
         Gold += CurrentLevel.StartingGold;
         MainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -35,16 +39,17 @@ public class GameManager : MonoBehaviour
         UpdateGoldText();
         SceneManager.LoadScene(DataHelper.Instance.CurrentLevel.ToString(), LoadSceneMode.Additive);
 
-        StartingTime = Time.time;
+        this.StartingTime = Time.time;
     }
 
     private void Update()
     {
-        float gameDuration = Time.time - StartingTime;
+        float gameDuration = Time.time - this.StartingTime;
         for (int i = 0; i < CurrentLevel.objects.Count; i++)
         {
             if (CurrentLevel.objects[i].time < gameDuration)
             {
+                Debug.Log(CurrentLevel.objects[i].time);
                 clone = Instantiate(enemyContainer[1], new Vector3(CurrentLevel.objects[i].positionX + 0.5f, 0f, CurrentLevel.objects[i].positionZ + 0.5f), Quaternion.identity) as GameObject;
                 enemySpawned = true;
                 CurrentLevel.objects.Remove(CurrentLevel.objects[i]);
@@ -81,13 +86,17 @@ public class GameManager : MonoBehaviour
 
     public void DestroyEnemyByClicking(BaseEnemyScript enemy)
     {
-        if (enemy.Life > 10)
+        if (enemy.Life > 0)
+        {
             enemy.Life -= 10;
+            Debug.Log(enemy.Life);
+            enemy.lifeBar.rectTransform.localScale = new Vector3((float)(enemy.lifeBar.rectTransform.localScale.x - 0.1), 1, 1);
+        }
         if (enemy.Life <= 0)
         {
             Destroy(enemy.gameObject);
         }
-        Debug.Log(enemy.Life);
+        //Debug.Log(enemy.Life);
     }
 
     public BaseEnemyScript GetClickedEnemy()

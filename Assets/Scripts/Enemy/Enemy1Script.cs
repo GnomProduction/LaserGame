@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy1Script : BaseEnemyScript
 {
@@ -14,12 +15,14 @@ public class Enemy1Script : BaseEnemyScript
     {
         Instance = this;
         Instance.Speed = 0.05f;
-        Instance.Life = 120;
+        Instance.Life = 100;
         Agent = GetComponent<NavMeshAgent>();
         Instance.movementSpeed = 5.0f;
         Instance.rotSpeed = 10.0f;
         baseEnemyScript = Instance.GetComponent<BaseEnemyScript>();
         myRigid = GetComponent<Rigidbody>();
+        // lifeBar = lifeCanvas.GetComponentInChildren<Image>();
+        baseEnemyScript.lifeBar = baseEnemyScript.lifeCanvas.GetComponentInChildren<Image>();
 
         //Checking for turret
         if (GameObject.FindGameObjectWithTag("Turret") != null)
@@ -32,6 +35,7 @@ public class Enemy1Script : BaseEnemyScript
 
     private void FixedUpdate()
     {
+       // lifeBar.rectTransform.localScale = new Vector3(Life/120, 1, 1);
         if (baseEnemyScript.attack)
         {
             Agent.SetDestination(Instance.turret.position);
@@ -42,6 +46,7 @@ public class Enemy1Script : BaseEnemyScript
                 myRigid.velocity = Vector3.zero;
             }
         }
+
     }
 
     private float CheckDistance(Vector3 playerPosition, Vector3 enemyPosition)

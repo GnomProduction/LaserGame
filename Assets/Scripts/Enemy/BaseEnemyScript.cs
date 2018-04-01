@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public interface IBaseEnemy
 {
@@ -22,11 +23,15 @@ public class BaseEnemyScript : MonoBehaviour, IBaseEnemy
     public uint Life { get; set; }
    // public Rigidbody myRigid;
     public Transform turret;
+    [SerializeField]
+    public Canvas lifeCanvas;
+    public Image lifeBar;
 
     private void Start()
     {
         Speed = 0.05f;
         Life = 100;
+        lifeBar = GetComponentInChildren<Image>();
         // myRigid = gameObject.GetComponent<Rigidbody>();
         //Agent = GetComponent<NavMeshAgent>();
     }
